@@ -1,0 +1,1056 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050510">
+<title>WEBX STUDIO — Beyond Digital</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #050510;
+  --text: #f7f7ff;
+  --muted: #a3a3bd;
+  --blue: #6c63ff;
+  --cyan: #42d9ff;
+  --line: rgba(255,255,255,.11);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  overflow-x:hidden;
+}
+body.loading { overflow:hidden; }
+a { color:inherit; text-decoration:none; }
+button { font:inherit; }
+#space {
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:-2;
+  pointer-events:none;
+}
+.ambient {
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 15% 15%,rgba(70,58,190,.16),transparent 40%),
+    radial-gradient(ellipse at 85% 60%,rgba(0,150,220,.10),transparent 42%),
+    linear-gradient(180deg,rgba(5,5,16,.2),#050510 95%);
+}
+.noise {
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:10;
+  opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+}
+.container { width:min(1160px,90%); margin:auto; }
+.gradient {
+  background:linear-gradient(100deg,#fff 5%,#8d86ff 48%,#45dfff 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.eyebrow {
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  color:#aaa6ff;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:3px;
+  text-transform:uppercase;
+}
+.eyebrow:before {
+  content:"";
+  width:24px;
+  height:1px;
+  background:var(--cyan);
+  box-shadow:0 0 10px var(--cyan);
+}
+.section { padding:110px 0; }
+.section-heading { max-width:650px; margin-bottom:48px; }
+.section-heading h2 {
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(36px,6vw,65px);
+  line-height:1.05;
+  letter-spacing:-2.5px;
+  margin:18px 0;
+}
+.section-heading p { color:var(--muted); line-height:1.8; }
+
+/* INTRO */
+#intro {
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:grid;
+  place-items:center;
+  background:#03030c;
+  transition:opacity 1s ease,visibility 1s ease;
+}
+#intro.hide { opacity:0; visibility:hidden; }
+#intro .intro-content {
+  position:relative;
+  z-index:2;
+  text-align:center;
+  pointer-events:none;
+}
+.intro-logo {
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;
+  font-size:clamp(48px,12vw,110px);
+  letter-spacing:-7px;
+  opacity:0;
+  transform:scale(.65);
+  animation:logoIn 1.3s .3s forwards;
+  text-shadow:0 0 45px rgba(105,99,255,.8);
+}
+.intro-sub {
+  margin-top:14px;
+  font-size:10px;
+  letter-spacing:7px;
+  color:#aaa9d7;
+  opacity:0;
+  animation:fadeIn 1s 1.2s forwards;
+}
+.intro-line {
+  width:0;
+  height:1px;
+  margin:24px auto;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  animation:lineIn 1.4s 1s forwards;
+}
+#skip {
+  position:absolute;
+  right:7%;
+  bottom:7%;
+  z-index:5;
+  color:#bbb;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:30px;
+  padding:11px 20px;
+  background:rgba(255,255,255,.05);
+  cursor:pointer;
+  font-size:11px;
+  letter-spacing:2px;
+  transition:.3s;
+}
+#skip:hover { background:white; color:#050510; }
+@keyframes logoIn { to { opacity:1; transform:scale(1); } }
+@keyframes fadeIn { to { opacity:1; } }
+@keyframes lineIn { to { width:240px; } }
+
+/* NAV */
+nav {
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:50;
+  padding:22px 0;
+  border-bottom:1px solid transparent;
+  transition:.3s;
+}
+nav.scrolled {
+  background:rgba(5,5,16,.78);
+  backdrop-filter:blur(20px);
+  border-color:var(--line);
+  padding:14px 0;
+}
+.nav-inner {
+  width:min(1240px,90%);
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.brand {
+  font-family:'Space Grotesk',sans-serif;
+  font-size:23px;
+  font-weight:700;
+  letter-spacing:-1px;
+}
+.brand span { color:var(--cyan); }
+.nav-links { display:flex; gap:34px; align-items:center; }
+.nav-links a {
+  color:#c2c2d5;
+  font-size:12px;
+  transition:.3s;
+}
+.nav-links a:hover { color:white; }
+.nav-cta {
+  border:1px solid rgba(110,104,255,.6);
+  padding:11px 19px;
+  border-radius:30px;
+  color:white!important;
+  background:rgba(105,99,255,.12);
+}
+.menu-btn {
+  display:none;
+  background:none;
+  border:0;
+  color:white;
+  font-size:25px;
+  cursor:pointer;
+}
+
+/* HERO */
+.hero {
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  position:relative;
+  padding:140px 0 90px;
+  overflow:hidden;
+}
+.hero-content { max-width:780px; position:relative; z-index:2; }
+.hero h1 {
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(55px,9vw,108px);
+  line-height:.98;
+  letter-spacing:-6px;
+  margin:26px 0;
+}
+.hero p {
+  color:#aaaac0;
+  font-size:16px;
+  line-height:1.9;
+  max-width:530px;
+}
+.hero-actions { display:flex; gap:15px; margin-top:34px; flex-wrap:wrap; }
+.btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  border-radius:40px;
+  padding:15px 25px;
+  font-size:12px;
+  font-weight:700;
+  transition:.3s;
+  cursor:pointer;
+}
+.btn-primary {
+  color:white;
+  background:linear-gradient(110deg,#625bff,#398bff);
+  box-shadow:0 0 35px rgba(94,90,255,.27);
+}
+.btn-primary:hover { transform:translateY(-4px); box-shadow:0 0 45px rgba(94,90,255,.5); }
+.btn-outline { border:1px solid var(--line); color:white; }
+.btn-outline:hover { border-color:var(--cyan); transform:translateY(-4px); }
+.hero-note {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:55px;
+  color:#85859f;
+  font-size:11px;
+  letter-spacing:1px;
+}
+.status-dot {
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#55edbd;
+  box-shadow:0 0 12px #55edbd;
+}
+.scroll-indicator {
+  position:absolute;
+  right:5%;
+  bottom:50px;
+  writing-mode:vertical-rl;
+  font-size:9px;
+  letter-spacing:4px;
+  color:#77778e;
+}
+
+/* STATS */
+.stats {
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+}
+.stat { padding:32px 15px; text-align:center; }
+.stat strong {
+  display:block;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:30px;
+}
+.stat span { color:#85859d; font-size:10px; letter-spacing:2px; }
+
+/* ABOUT */
+.about-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:70px;
+  align-items:center;
+}
+.about-copy h3 {
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(30px,4vw,48px);
+  letter-spacing:-2px;
+  line-height:1.15;
+  margin:20px 0;
+}
+.about-copy p { color:var(--muted); line-height:1.9; margin-bottom:18px; }
+.orb-wrap {
+  min-height:390px;
+  display:grid;
+  place-items:center;
+  perspective:900px;
+}
+.orb {
+  width:min(300px,70vw);
+  aspect-ratio:1;
+  position:relative;
+  transform-style:preserve-3d;
+  animation:orbFloat 6s ease-in-out infinite;
+}
+.orb-core {
+  position:absolute;
+  inset:20%;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 25%,#b9b4ff,#625bff 35%,#11103e 70%);
+  box-shadow:inset -20px -20px 40px #080820,0 0 80px rgba(104,95,255,.5);
+}
+.orb-ring {
+  position:absolute;
+  inset:0;
+  border:1px solid rgba(91,207,255,.7);
+  border-radius:50%;
+  transform:rotateX(70deg) rotateY(25deg);
+  box-shadow:0 0 18px rgba(65,208,255,.25);
+}
+.orb-ring.two { transform:rotateY(70deg) rotateX(20deg); border-color:rgba(143,117,255,.7); }
+.orb-ring.three { inset:10%; transform:rotateX(75deg) rotateZ(65deg); border-color:rgba(255,255,255,.4); }
+@keyframes orbFloat { 50% { transform:translateY(-18px) rotateY(12deg) rotateX(8deg); } }
+
+/* SERVICES */
+.services-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+.service-card {
+  min-height:260px;
+  padding:30px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.015));
+  transition:.4s;
+  transform-style:preserve-3d;
+  position:relative;
+  overflow:hidden;
+}
+.service-card:before {
+  content:"";
+  position:absolute;
+  width:170px;
+  height:170px;
+  right:-90px;
+  top:-90px;
+  background:var(--glow,rgba(100,90,255,.25));
+  filter:blur(45px);
+  transition:.4s;
+}
+.service-card:hover {
+  border-color:rgba(111,104,255,.7);
+  transform:translateY(-9px) rotateX(3deg);
+  background:rgba(100,90,255,.08);
+}
+.service-icon {
+  width:50px;
+  height:50px;
+  border:1px solid rgba(130,125,255,.4);
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  font-size:23px;
+  margin-bottom:30px;
+  background:rgba(103,95,255,.12);
+}
+.service-card h3 { font-family:'Space Grotesk'; font-size:21px; margin-bottom:12px; }
+.service-card p { color:var(--muted); font-size:13px; line-height:1.8; }
+
+/* WORK */
+.work-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.work-card {
+  border:1px solid var(--line);
+  border-radius:20px;
+  overflow:hidden;
+  background:rgba(255,255,255,.035);
+  transition:.4s;
+}
+.work-card:hover { transform:translateY(-7px); border-color:rgba(105,99,255,.7); }
+.work-visual {
+  height:260px;
+  display:grid;
+  place-items:center;
+  position:relative;
+  overflow:hidden;
+  background:radial-gradient(circle at 50% 50%,#29235d,#101026 65%,#080813);
+}
+.work-visual.alt { background:radial-gradient(circle at 50% 50%,#15445b,#101026 65%,#080813); }
+.work-visual.third { background:radial-gradient(circle at 50% 50%,#492b5b,#101026 65%,#080813); }
+.mock-window {
+  width:65%;
+  height:70%;
+  border:1px solid rgba(255,255,255,.3);
+  border-radius:12px;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(8px);
+  transform:perspective(700px) rotateY(-13deg) rotateX(5deg);
+  box-shadow:0 20px 50px rgba(0,0,0,.35);
+  padding:13px;
+}
+.mock-dots { display:flex; gap:5px; }
+.mock-dots i { width:6px;height:6px;border-radius:50%;background:#aaa; }
+.mock-content { margin:20px 8px; }
+.mock-content b { display:block;font:700 23px 'Space Grotesk'; }
+.mock-content span { display:block;width:70%;height:5px;border-radius:10px;background:rgba(255,255,255,.35);margin-top:12px; }
+.mock-content span:nth-child(3) { width:45%; }
+.mock-button { width:65px;height:18px;border-radius:20px;background:#7770ff;margin-top:20px; }
+.work-info { padding:23px; }
+.work-info small { color:#8f88ff;letter-spacing:2px;font-size:9px; }
+.work-info h3 { font:600 23px 'Space Grotesk'; margin:9px 0; }
+.work-info p { color:var(--muted); font-size:13px; line-height:1.7; }
+
+/* PROCESS */
+.process-list { border-top:1px solid var(--line); }
+.process-item {
+  display:grid;
+  grid-template-columns:90px 1fr 2fr;
+  gap:25px;
+  padding:27px 10px;
+  border-bottom:1px solid var(--line);
+  align-items:center;
+}
+.process-num { color:#7770ff; font:600 25px 'Space Grotesk'; }
+.process-item h3 { font:600 22px 'Space Grotesk'; }
+.process-item p { color:var(--muted); font-size:13px; line-height:1.7; }
+
+/* CONTACT */
+.contact-box {
+  position:relative;
+  overflow:hidden;
+  text-align:center;
+  padding:80px 25px;
+  border:1px solid rgba(119,110,255,.35);
+  border-radius:25px;
+  background:radial-gradient(ellipse at 50% 120%,rgba(77,65,210,.3),transparent 65%),rgba(255,255,255,.025);
+}
+.contact-box h2 {
+  font:700 clamp(38px,7vw,70px)/1.05 'Space Grotesk';
+  letter-spacing:-3px;
+  margin:20px 0;
+}
+.contact-box p { color:var(--muted); margin:0 auto 28px; max-width:480px; line-height:1.8; }
+footer { padding:35px 0; border-top:1px solid var(--line); }
+.footer-inner { display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+footer p { color:#77778e; font-size:11px; }
+.footer-links { display:flex; gap:20px; color:#aaa; font-size:11px; }
+
+/* REVEAL */
+.reveal { opacity:0; transform:translateY(35px); transition:opacity .8s,transform .8s; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+@media(max-width:800px) {
+  .nav-links {
+    display:none;
+    position:absolute;
+    top:70px;
+    left:5%;
+    right:5%;
+    padding:25px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:rgba(7,7,22,.96);
+    backdrop-filter:blur(20px);
+    flex-direction:column;
+    align-items:stretch;
+    gap:22px;
+  }
+  .nav-links.open { display:flex; }
+  .menu-btn { display:block; }
+  .nav-cta { text-align:center; }
+  .about-grid { grid-template-columns:1fr; gap:20px; }
+  .orb-wrap { min-height:300px; }
+  .services-grid { grid-template-columns:1fr 1fr; }
+  .process-item { grid-template-columns:45px 1fr; gap:12px; }
+  .process-item p { grid-column:2; }
+}
+@media(max-width:560px) {
+  .hero h1 { letter-spacing:-3px; }
+  .hero p { font-size:14px; }
+  .section { padding:78px 0; }
+  .services-grid,.work-grid { grid-template-columns:1fr; }
+  .stat strong { font-size:23px; }
+  .stat span { font-size:8px; letter-spacing:1px; }
+  .contact-box { padding:60px 20px; }
+  .scroll-indicator { display:none; }
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; transition-duration:.01ms!important; }
+}
+</style>
+</head>
+
+<body class="loading">
+
+<canvas id="space"></canvas>
+<div class="ambient"></div>
+<div class="noise"></div>
+
+<!-- CINEMATIC INTRO -->
+<div id="intro">
+  <div class="intro-content">
+    <div class="intro-logo">WEBX<span class="gradient">.</span></div>
+    <div class="intro-line"></div>
+    <div class="intro-sub">ENTER THE DIGITAL UNIVERSE</div>
+  </div>
+  <button id="skip">SKIP INTRO ↗</button>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="#home">WEBX<span>.</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#work">Our Work</a>
+      <a href="#process">Process</a>
+      <a href="#contact" class="nav-cta">Let's Talk ↗</a>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<main>
+<section class="hero" id="home">
+  <div class="container">
+    <div class="hero-content">
+      <span class="eyebrow">Independent digital studio</span>
+      <h1>We build<br><span class="gradient">beyond</span><br>ordinary.</h1>
+      <p>
+        We create powerful digital experiences, futuristic websites
+        and memorable brands for businesses ready to stand out.
+      </p>
+      <div class="hero-actions">
+        <a href="#work" class="btn btn-primary">Explore our universe ↗</a>
+        <a href="#contact" class="btn btn-outline">Start a project</a>
+      </div>
+      <div class="hero-note">
+        <span class="status-dot"></span>
+        CREATIVITY MEETS TECHNOLOGY
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">SCROLL TO EXPLORE ↓</div>
+</section>
+
+<!-- STATS -->
+<div class="container">
+  <div class="stats reveal">
+    <div class="stat"><strong>3D</strong><span>IMMERSIVE EXPERIENCES</span></div>
+    <div class="stat"><strong>∞</strong><span>CREATIVE POSSIBILITIES</span></div>
+    <div class="stat"><strong>01</strong><span>VISION — YOUR BRAND</span></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="container about-grid">
+    <div class="about-copy reveal">
+      <span class="eyebrow">Who we are</span>
+      <h3>Not just websites.<br><span class="gradient">Digital experiences.</span></h3>
+      <p>
+        WEBX STUDIO is a creative web design concept focused on
+        building modern, engaging and visually distinctive websites.
+      </p>
+      <p>
+        From the first idea to the final experience, our goal is
+        simple: make your digital presence unforgettable.
+      </p>
+      <a href="#services" class="btn btn-outline">Discover what we do ↗</a>
+    </div>
+    <div class="orb-wrap reveal">
+      <div class="orb">
+        <div class="orb-core"></div>
+        <div class="orb-ring"></div>
+        <div class="orb-ring two"></div>
+        <div class="orb-ring three"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-heading reveal">
+      <span class="eyebrow">What we create</span>
+      <h2>Built to make<br><span class="gradient">an impact.</span></h2>
+      <p>Creative digital solutions designed to help brands make a stronger impression online.</p>
+    </div>
+
+    <div class="services-grid">
+      <article class="service-card reveal">
+        <div class="service-icon">◈</div>
+        <h3>Web Design</h3>
+        <p>Beautiful, modern and responsive website designs that give your brand a distinct identity.</p>
+      </article>
+      <article class="service-card reveal" style="--glow:rgba(0,180,255,.25)">
+        <div class="service-icon">⌘</div>
+        <h3>Web Development</h3>
+        <p>Fast, functional and carefully crafted websites built for a smooth user experience.</p>
+      </article>
+      <article class="service-card reveal" style="--glow:rgba(190,80,255,.25)">
+        <div class="service-icon">✳</div>
+        <h3>Brand Identity</h3>
+        <p>Visual direction and digital branding that helps your business look consistent and memorable.</p>
+      </article>
+      <article class="service-card reveal">
+        <div class="service-icon">◎</div>
+        <h3>Landing Pages</h3>
+        <p>Focused landing page concepts designed to communicate your offer clearly.</p>
+      </article>
+      <article class="service-card reveal" style="--glow:rgba(0,180,255,.25)">
+        <div class="service-icon">✧</div>
+        <h3>3D Experiences</h3>
+        <p>Immersive visual elements and motion that make a website feel alive.</p>
+      </article>
+      <article class="service-card reveal" style="--glow:rgba(190,80,255,.25)">
+        <div class="service-icon">↗</div>
+        <h3>Website Refresh</h3>
+        <p>Give an existing website a fresh, modern look with improved structure and usability.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="section" id="work">
+  <div class="container">
+    <div class="section-heading reveal">
+      <span class="eyebrow">Selected concepts</span>
+      <h2>Ideas turned into<br><span class="gradient">experiences.</span></h2>
+      <p>A few fictional design concepts showing the kind of visual directions we can explore.</p>
+    </div>
+
+    <div class="work-grid">
+      <article class="work-card reveal">
+        <div class="work-visual">
+          <div class="mock-window">
+            <div class="mock-dots"><i></i><i></i><i></i></div>
+            <div class="mock-content">
+              <b>NOIR<br>COLLECTIVE.</b>
+              <span></span><span></span>
+              <div class="mock-button"></div>
+            </div>
+          </div>
+        </div>
+        <div class="work-info">
+          <small>01 / FASHION CONCEPT</small>
+          <h3>Noir Collective</h3>
+          <p>A premium fashion website concept with a minimal editorial direction.</p>
+        </div>
+      </article>
+
+      <article class="work-card reveal">
+        <div class="work-visual alt">
+          <div class="mock-window">
+            <div class="mock-dots"><i></i><i></i><i></i></div>
+            <div class="mock-content">
+              <b>FUTURE<br>ACADEMY.</b>
+              <span></span><span></span>
+              <div class="mock-button"></div>
+            </div>
+          </div>
+        </div>
+        <div class="work-info">
+          <small>02 / EDUCATION CONCEPT</small>
+          <h3>Future Academy</h3>
+          <p>A clean learning platform concept designed around clarity and simplicity.</p>
+        </div>
+      </article>
+
+      <article class="work-card reveal">
+        <div class="work-visual third">
+          <div class="mock-window">
+            <div class="mock-dots"><i></i><i></i><i></i></div>
+            <div class="mock-content">
+              <b>ATELIER<br>ÉTOILE.</b>
+              <span></span><span></span>
+              <div class="mock-button"></div>
+            </div>
+          </div>
+        </div>
+        <div class="work-info">
+          <small>03 / RESTAURANT CONCEPT</small>
+          <h3>Atelier Étoile</h3>
+          <p>An elegant restaurant website concept with a warm visual atmosphere.</p>
+        </div>
+      </article>
+
+      <article class="work-card reveal">
+        <div class="work-visual">
+          <div class="mock-window">
+            <div class="mock-dots"><i></i><i></i><i></i></div>
+            <div class="mock-content">
+              <b>ORBIT<br>DIGITAL.</b>
+              <span></span><span></span>
+              <div class="mock-button"></div>
+            </div>
+          </div>
+        </div>
+        <div class="work-info">
+          <small>04 / TECHNOLOGY CONCEPT</small>
+          <h3>Orbit Digital</h3>
+          <p>A futuristic technology brand concept with a bold digital identity.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section" id="process">
+  <div class="container">
+    <div class="section-heading reveal">
+      <span class="eyebrow">How we work</span>
+      <h2>From idea to<br><span class="gradient">launch.</span></h2>
+      <p>A clear creative process that turns an initial idea into a complete digital experience.</p>
+    </div>
+    <div class="process-list">
+      <div class="process-item reveal">
+        <span class="process-num">01</span>
+        <h3>Discover</h3>
+        <p>Understand the brand, audience, goals and overall direction of the project.</p>
+      </div>
+      <div class="process-item reveal">
+        <span class="process-num">02</span>
+        <h3>Design</h3>
+        <p>Build the visual direction, layout, user journey and design system.</p>
+      </div>
+      <div class="process-item reveal">
+        <span class="process-num">03</span>
+        <h3>Develop</h3>
+        <p>Turn the approved design into a responsive and functional website.</p>
+      </div>
+      <div class="process-item reveal">
+        <span class="process-num">04</span>
+        <h3>Launch</h3>
+        <p>Review the final experience and prepare the website for launch.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="contact-box reveal">
+      <span class="eyebrow">Your next chapter starts here</span>
+      <h2>Let's create<br><span class="gradient">something epic.</span></h2>
+      <p>Have an idea for a website or a brand? Let's turn that idea into something extraordinary.</p>
+      <a href="mailto:hello@webxstudio.example" class="btn btn-primary">Start a conversation ↗</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <a class="brand" href="#home">WEBX<span>.</span></a>
+    <p>© <span id="year"></span> WEBX STUDIO. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+
+/* THREE.JS 3D UNIVERSE */
+const canvas = document.querySelector('#space');
+let scene, camera, renderer, core, portal, stars, particles;
+let animationFrame;
+let mouseX = 0, mouseY = 0;
+let targetX = 0, targetY = 0;
+let introStart = performance.now();
+let introFinished = false;
+
+try {
+  scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x050510, 0.022);
+
+  camera = new THREE.PerspectiveCamera(
+    65,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  camera.position.set(0, 0, 13);
+
+  renderer = new THREE.WebGLRenderer({
+    canvas,
+    alpha: true,
+    antialias: true,
+    powerPreference: 'high-performance'
+  });
+
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.7));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  /* CENTRAL 3D OBJECT */
+  const coreGeometry = new THREE.IcosahedronGeometry(2.05, 2);
+  const coreMaterial = new THREE.MeshStandardMaterial({
+    color: 0x5550e8,
+    metalness: 0.8,
+    roughness: 0.2,
+    emissive: 0x17105a,
+    emissiveIntensity: 0.65,
+    flatShading: true
+  });
+
+  core = new THREE.Mesh(coreGeometry, coreMaterial);
+  core.position.set(3.7, 0.15, -2);
+  scene.add(core);
+
+  const wire = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(2.12, 1),
+    new THREE.MeshBasicMaterial({
+      color: 0x72cfff,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.23
+    })
+  );
+  core.add(wire);
+
+  /* GLOWING PORTAL RINGS */
+  portal = new THREE.Group();
+  portal.position.set(3.7, 0.15, -2);
+  scene.add(portal);
+
+  const ringColors = [0x746aff, 0x35d7ff, 0xa18cff, 0x647bff];
+
+  for (let i = 0; i < 4; i++) {
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(2.8 + i * 0.34, 0.012, 8, 150),
+      new THREE.MeshBasicMaterial({
+        color: ringColors[i],
+        transparent: true,
+        opacity: 0.65 - i * 0.1
+      })
+    );
+    ring.rotation.x = Math.PI * (0.35 + i * 0.12);
+    ring.rotation.y = i * 0.7;
+    portal.add(ring);
+  }
+
+  /* LIGHTS */
+  scene.add(new THREE.AmbientLight(0x8d8aff, 1.5));
+
+  const blueLight = new THREE.PointLight(0x40cfff, 45, 25);
+  blueLight.position.set(4, 3, 4);
+  scene.add(blueLight);
+
+  const purpleLight = new THREE.PointLight(0x7160ff, 50, 30);
+  purpleLight.position.set(-5, -2, 3);
+  scene.add(purpleLight);
+
+  /* STAR FIELD */
+  const starCount = window.innerWidth < 600 ? 1000 : 2200;
+  const starPositions = new Float32Array(starCount * 3);
+  const starSizes = new Float32Array(starCount);
+
+  for (let i = 0; i < starCount; i++) {
+    starPositions[i * 3] = (Math.random() - 0.5) * 100;
+    starPositions[i * 3 + 1] = (Math.random() - 0.5) * 65;
+    starPositions[i * 3 + 2] = (Math.random() - 0.5) * 85;
+    starSizes[i] = Math.random();
+  }
+
+  const starGeometry = new THREE.BufferGeometry();
+  starGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(starPositions, 3)
+  );
+  starGeometry.setAttribute(
+    'aSize',
+    new THREE.BufferAttribute(starSizes, 1)
+  );
+
+  stars = new THREE.Points(
+    starGeometry,
+    new THREE.PointsMaterial({
+      color: 0xbacaff,
+      size: 0.075,
+      transparent: true,
+      opacity: 0.85,
+      sizeAttenuation: true
+    })
+  );
+  scene.add(stars);
+
+  /* FLOATING PARTICLES */
+  const particleCount = 450;
+  const particlePositions = new Float32Array(particleCount * 3);
+
+  for (let i = 0; i < particleCount; i++) {
+    particlePositions[i * 3] = (Math.random() - 0.5) * 18;
+    particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 12;
+    particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 16;
+  }
+
+  const particleGeometry = new THREE.BufferGeometry();
+  particleGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(particlePositions, 3)
+  );
+
+  particles = new THREE.Points(
+    particleGeometry,
+    new THREE.PointsMaterial({
+      color: 0x7d83ff,
+      size: 0.035,
+      transparent: true,
+      opacity: 0.7
+    })
+  );
+  scene.add(particles);
+
+  /* ANIMATION */
+  const clock = new THREE.Clock();
+
+  function animate() {
+    animationFrame = requestAnimationFrame(animate);
+    const elapsed = clock.getElapsedTime();
+
+    targetX += (mouseX - targetX) * 0.025;
+    targetY += (mouseY - targetY) * 0.025;
+
+    if (core) {
+      core.rotation.x = elapsed * 0.12 + targetY * 0.15;
+      core.rotation.y = elapsed * 0.2 + targetX * 0.2;
+      core.position.y = 0.15 + Math.sin(elapsed * 0.7) * 0.18;
+    }
+
+    if (portal) {
+      portal.rotation.y = elapsed * 0.12;
+      portal.rotation.z = elapsed * 0.07;
+    }
+
+    if (stars) stars.rotation.y = elapsed * 0.004;
+    if (particles) {
+      particles.rotation.y = elapsed * 0.018;
+      particles.rotation.x = elapsed * 0.009;
+    }
+
+    /* Cinematic camera intro movement */
+    if (!introFinished) {
+      const progress = Math.min((performance.now() - introStart) / 4500, 1);
+      const smooth = progress * progress * (3 - 2 * progress);
+      camera.position.z = 13 - smooth * 2.2;
+    } else {
+      camera.position.x += (targetX * 0.45 - camera.position.x) * 0.018;
+      camera.position.y += (-targetY * 0.35 - camera.position.y) * 0.018;
+    }
+
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+  }
+
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.7));
+  });
+
+  window.addEventListener('pointermove', (event) => {
+    mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+} catch (error) {
+  console.warn('3D scene could not start:', error);
+}
+
+/* INTRO CONTROL */
+const intro = document.querySelector('#intro');
+
+function finishIntro() {
+  if (introFinished) return;
+  introFinished = true;
+  document.body.classList.remove('loading');
+  intro.classList.add('hide');
+  setTimeout(() => intro.remove(), 1200);
+}
+
+document.querySelector('#skip').addEventListener('click', finishIntro);
+setTimeout(finishIntro, 5200);
+
+/* NAVIGATION */
+const navbar = document.querySelector('#navbar');
+const menuBtn = document.querySelector('#menuBtn');
+const navLinks = document.querySelector('#navLinks');
+
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+menuBtn.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  menuBtn.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+});
+
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    menuBtn.textContent = '☰';
+  });
+});
+
+/* SCROLL REVEAL */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* FOOTER YEAR */
+document.querySelector('#year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
